@@ -4,17 +4,14 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium import webdriver
-# from webdriver_manager.chrome import ChromeDriverManager
-
-from tests.test_loginpage import ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+from tests.test_loginpage import driver
 
 
 class TestNegativeScenarious:
     @pytest.mark.login
     @pytest.mark.negative
-    def test_negative_username(self):
-        driver = webdriver.Chrome()
-
+    def test_negative_username(self, driver):
         # Go to webpage
         driver.get("https://practicetestautomation.com/practice-test-login/")
 
