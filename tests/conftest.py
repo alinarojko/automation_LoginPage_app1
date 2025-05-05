@@ -12,9 +12,10 @@ def pytest_addoption(parser):
         "--browser", action="store", default="chrome", help="browser to execute tests (chrome or edge)")
 
 
-@pytest.fixture()
+@pytest.fixture(params=["chrome", "edge"])
 def driver(request):
-    browser = request.config.getoption("--browser")
+    # browser = request.config.getoption("--browser")
+    browser = request.param
     print(f"Creating {browser} Driver")
     if browser == "chrome":
         my_driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
