@@ -1,25 +1,11 @@
 import pytest
-import time
-from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service as ChromeService, Service
-from webdriver_manager.chrome import ChromeDriverManager
-
-
-@pytest.fixture()
-def driver():
-    print("Creating Chrome Driver")
-    my_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    yield my_driver
-    my_driver.quit()
-    print("Closing Chrome Driver")
-
-
-class ChromeService:
-    pass
+from conftest import driver
+import time
 
 
 class TestPositiveScenarious:
+
     @pytest.mark.login
     @pytest.mark.positive
     def test_positive_login(self, driver):
@@ -54,3 +40,31 @@ class TestPositiveScenarious:
         assert logout_locator.is_displayed()
 
 
+class TestNegativeScenarious:
+    @pytest.mark.login
+    @pytest.mark.negative
+    @pytest.mark.parametrize("username, password, expected_error_message",
+                             [("incorrect_user", "Password123", "Your username is invalid!"),
+                              ("student", "Incorrect_password", "Your password is invalid!")])
+    def test_negative_login(self, driver, username, password, expected_error_message):
+        # Go to webpage
+        driver.get("https://practicetestautomation.com/practice-test-login/")
+
+        # Type username student into Username field
+        username_locator = driver.find_element(By.ID, "username")
+        username_locator.send_keys(username)
+
+        # Type password Password123 into Password field
+        password_locator = driver.find_element(By.XPATH, "//input[@id='password']")
+        password_locator.send_keys(password)
+
+        # Push Submit button
+        button_locator = driver.find_element(By.ID, "submit")
+        button_locator.click()
+        time.sleep(2)
+
+        # Verify the error message is displayed
+        error_locator = driver.find_element(By.ID, "error")
+        assert error_locator.is_displayed(), "Error message is not displayed, but it should"
+        error_message = error_locator.text
+        assert error_message == expected_error_message, "Error message is not expected"
