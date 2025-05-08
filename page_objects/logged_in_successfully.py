@@ -1,6 +1,5 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
-
 from page_objects.base_page import BasePage
 
 
@@ -16,10 +15,11 @@ class LoggedInSuccessfullyPage(BasePage):
     def get_expected_url(self) -> str:
         return self._url
 
-    def get_header(self, __header_locator):
-        super()._get_text(self.__header_locator)
+    @property
+    def get_header(self):
+        return super().get_text(self.__header_locator)
 
-    def is_logout_button_displayed(self, __log_out_button_locator) -> bool:
+    def _is_logout_button_displayed(self, __log_out_button_locator) -> bool:
         return super()._is_displayed(self.__log_out_button_locator)
 
 
