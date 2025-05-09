@@ -41,3 +41,7 @@ class BasePage:
         self._wait_until_element_is_visible(locator, time)
         return self._find(locator).text
 
+    def _clear(self, locator: tuple[str, str], time: int = 10 ):
+        self._wait_until_element_is_visible(locator, time)
+        return self._find(locator).clear()
+
